@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Loja</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+
+    header {
+      background: #1e293b;
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 { font-size: 22px; }
+
+    #btn-carrinho {
+      background: #f59e0b;
+      color: #1e293b;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .banner {
+      text-align: center;
+      padding: 48px 16px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: #fff;
+    }
+
+    .banner h2 { font-size: 30px; margin-bottom: 8px; }
+
+    .filtros {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 24px 16px 0;
+    }
+
+    .filtros button {
+      padding: 8px 16px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .filtros button.ativo {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+    }
+
+    .produtos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s;
+    }
+
+    .card:hover { transform: translateY(-4px); }
+    .card .emoji { font-size: 56px; }
+    .card h3 { margin: 10px 0 4px; font-size: 17px; }
+    .card .preco { color: #16a34a; font-weight: bold; margin-bottom: 12px; }
+
+    .card button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .card button:hover { background: #1d4ed8; }
+
+    /* Carrinho lateral */
+    #painel {
+      position: fixed;
+      top: 0;
+      right: -360px;
+      width: 340px;
+      max-width: 100%;
+      height: 100%;
+      background: #fff;
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      transition: right 0.3s;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #painel.aberto { right: 0; }
+    #painel h2 { margin-bottom: 12px; }
+    #itens { flex: 1; overflow-y: auto; list-style: none; }
+
+    #itens li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    #itens li button {
+      background: #dc2626;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 2px 8px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    #total { font-size: 18px; font-weight: bold; margin: 16px 0 8px; }
+
+    #finalizar {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #fechar {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      margin-top: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #64748b;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🛍️ Mini Loja</h1>
+    <button id="btn-carrinho">🛒 Carrinho (<span id="qtd">0</span>)</button>
+  </header>
+
+  <section class="banner">
+    <h2>Ofertas da semana</h2>
+    <p>Escolha seus produtos e adicione ao carrinho!</p>
+  </section>
+
+  <nav class="filtros" id="filtros"></nav>
+  <main class="produtos" id="produtos"></main>
+
+  <aside id="painel">
+    <h2>Seu carrinho</h2>
+    <ul id="itens"></ul>
+    <p id="total">Total: R$ 0,00</p>
+    <button id="finalizar">Finalizar compra</button>
+    <button id="fechar">Fechar</button>
+  </aside>
+
+  <footer>Mini Loja &copy; 2026 - Projeto de estudo</footer>
+
+  <script>
+    const produtos = [
+      { id: 1, nome: "Camiseta", preco: 49.9, emoji: "👕", categoria: "Roupas" },
+      { id: 2, nome: "Tênis", preco: 199.9, emoji: "👟", categoria: "Roupas" },
+      { id: 3, nome: "Boné", preco: 34.9, emoji: "🧢", categoria: "Roupas" },
+      { id: 4, nome: "Fone de ouvido", preco: 89.9, emoji: "🎧", categoria: "Eletrônicos" },
+      { id: 5, nome: "Mouse", preco: 59.9, emoji: "🖱️", categoria: "Eletrônicos" },
+      { id: 6, nome: "Teclado", preco: 129.9, emoji: "⌨️", categoria: "Eletrônicos" },
+      { id: 7, nome: "Caderno", preco: 19.9, emoji: "📓", categoria: "Papelaria" },
+      { id: 8, nome: "Mochila", preco: 119.9, emoji: "🎒", categoria: "Papelaria" }
+    ];
+
+    let carrinho = [];
+    let categoriaAtual = "Todos";
+
+    const formatar = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+    function mostrarFiltros() {
+      const categorias = ["Todos", ...new Set(produtos.map(p => p.categoria))];
+      const nav = document.getElementById("filtros");
+      nav.innerHTML = "";
+      categorias.forEach(cat => {
+        const b = document.createElement("button");
+        b.textContent = cat;
+        if (cat === categoriaAtual) b.classList.add("ativo");
+        b.onclick = () => { categoriaAtual = cat; mostrarFiltros(); mostrarProdutos(); };
+        nav.appendChild(b);
+      });
+    }
+
+    function mostrarProdutos() {
+      const area = document.getElementById("produtos");
+      area.innerHTML = "";
+      produtos
+        .filter(p => categoriaAtual === "Todos" || p.categoria === categoriaAtual)
+        .forEach(p => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="emoji">${p.emoji}</div>
+            <h3>${p.nome}</h3>
+            <p class="preco">${formatar(p.preco)}</p>
+            <button>Adicionar</button>`;
+          card.querySelector("button").onclick = () => adicionar(p.id);
+          area.appendChild(card);
+        });
+    }
+
+    function adicionar(id) {
+      const produto = produtos.find(p => p.id === id);
+      const item = carrinho.find(i => i.id === id);
+      if (item) item.qtd++;
+      else carrinho.push({ ...produto, qtd: 1 });
+      atualizarCarrinho();
+    }
+
+    function remover(id) {
+      carrinho = carrinho.filter(i => i.id !== id);
+      atualizarCarrinho();
+    }
+
+    function atualizarCarrinho() {
+      const lista = document.getElementById("itens");
+      lista.innerHTML = "";
+      let total = 0;
+      let quantidade = 0;
+
+      carrinho.forEach(item => {
+        total += item.preco * item.qtd;
+        quantidade += item.qtd;
+        const li = document.createElement("li");
+        li.innerHTML = `<span>${item.emoji} ${item.nome} x${item.qtd}</span>
+                        <span>${formatar(item.preco * item.qtd)}<button>X</button></span>`;
+        li.querySelector("button").onclick = () => remover(item.id);
+        lista.appendChild(li);
+      });
+
+      document.getElementById("qtd").textContent = quantidade;
+      document.getElementById("total").textContent = "Total: " + formatar(total);
+    }
+
+    const painel = document.getElementById("painel");
+    document.getElementById("btn-carrinho").onclick = () => painel.classList.add("aberto");
+    document.getElementById("fechar").onclick = () => painel.classList.remove("aberto");
+
+    document.getElementById("finalizar").onclick = () => {
+      if (carrinho.length === 0) { alert("Seu carrinho está vazio."); return; }
+      alert("Compra finalizada! Obrigado por comprar na Mini Loja.");
+      carrinho = [];
+      atualizarCarrinho();
+      painel.classList.remove("aberto");
+    };
+
+    mostrarFiltros();
+    mostrarProdutos();
+  </script>
+</body>
+</html>
