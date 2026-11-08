@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mini Loja do Professor Gabriel Parizotto</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: Arial, sans-serif;
@@ -25,7 +30,9 @@
       z-index: 10;
     }
 
-    header h1 { font-size: 22px; }
+    header h1 {
+      font-size: 22px;
+    }
 
     #btn-carrinho {
       background: #f59e0b;
@@ -44,7 +51,10 @@
       color: #fff;
     }
 
-    .banner h2 { font-size: 30px; margin-bottom: 8px; }
+    .banner h2 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
 
     .filtros {
       display: flex;
@@ -86,10 +96,24 @@
       transition: transform 0.2s;
     }
 
-    .card:hover { transform: translateY(-4px); }
-    .card .emoji { font-size: 56px; }
-    .card h3 { margin: 10px 0 4px; font-size: 17px; }
-    .card .preco { color: #16a34a; font-weight: bold; margin-bottom: 12px; }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card .emoji {
+      font-size: 56px;
+    }
+
+    .card h3 {
+      margin: 10px 0 4px;
+      font-size: 17px;
+    }
+
+    .card .preco {
+      color: #16a34a;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
 
     .card button {
       background: #2563eb;
@@ -100,7 +124,9 @@
       cursor: pointer;
     }
 
-    .card button:hover { background: #1d4ed8; }
+    .card button:hover {
+      background: #1d4ed8;
+    }
 
     /* Carrinho lateral */
     #painel {
@@ -119,9 +145,19 @@
       flex-direction: column;
     }
 
-    #painel.aberto { right: 0; }
-    #painel h2 { margin-bottom: 12px; }
-    #itens { flex: 1; overflow-y: auto; list-style: none; }
+    #painel.aberto {
+      right: 0;
+    }
+
+    #painel h2 {
+      margin-bottom: 12px;
+    }
+
+    #itens {
+      flex: 1;
+      overflow-y: auto;
+      list-style: none;
+    }
 
     #itens li {
       display: flex;
@@ -142,7 +178,11 @@
       margin-left: 8px;
     }
 
-    #total { font-size: 18px; font-weight: bold; margin: 16px 0 8px; }
+    #total {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 16px 0 8px;
+    }
 
     #finalizar {
       background: #16a34a;
@@ -170,6 +210,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <header>
@@ -193,7 +234,7 @@
     <button id="fechar">Fechar</button>
   </aside>
 
-  <footer>Mini Loja &copy; 2026 - Projeto de estudo</footer>
+     <footer>Mini Loja &copy; 2026 - Atividade de Versionamento com Git e GitHub</footer>
 
   <script>
     const produtos = [
@@ -204,7 +245,9 @@
       { id: 5, nome: "Mouse", preco: 59.9, emoji: "🖱️", categoria: "Eletrônicos" },
       { id: 6, nome: "Teclado", preco: 129.9, emoji: "⌨️", categoria: "Eletrônicos" },
       { id: 7, nome: "Caderno", preco: 19.9, emoji: "📓", categoria: "Papelaria" },
-      { id: 8, nome: "Mochila", preco: 119.9, emoji: "🎒", categoria: "Papelaria" }
+      { id: 8, nome: "Mochila", preco: 119.9, emoji: "🎒", categoria: "Papelaria" },
+      { id: 9, nome: "Relógio", preco: 149.9, emoji: "⌚", categoria: "Eletrônicos" },
+      { id: 10, nome: "Garrafa", preco: 39.9, emoji: "🧴", categoria: "Papelaria" }
     ];
 
     let carrinho = [];
@@ -292,4 +335,5 @@
     mostrarProdutos();
   </script>
 </body>
+
 </html>
